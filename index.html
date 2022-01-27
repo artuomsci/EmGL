@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+
+<meta charset="windows-1251">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+
+<title>EmGL</title>
+
+<link rel="icon" href="webdata/Formula-icon.ico">
+
+<link href="webdata/webext/jquery-ui-1.11.4.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+
+<script src="webdata/webext/JQuery/jquery-2.1.4.js"></script>
+
+<script type="text/javascript" src="ext/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
+<link href='webdata/webext/JQuery/css/styles.css'   type='text/css' rel='stylesheet'>
+
+<script async="" src="webdata/webext/FileSaver.js/FileSaver.js"/></script>
+
+<script async="" src="webdata/webext/Blob.js/BlobBuilder.js"/></script>
+
+<script async type="text/javascript" src="main.js"></script>
+
+<!-- <script type="text/javascript"> function ShowWelcome() { window.location.href = "#openModal"; }</script> -->
+
+<style>
+		
+		.emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: inline-block; }
+		div.emscripten { text-align: center; }
+		div.emscripten_border { border: 0px solid black; }
+		
+		canvas.emscripten { border: 0px none; }
+		
+.modalDialog {
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+.modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+.modalDialog > div {
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+}
+.close {
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+.close:hover {
+    background: #00d9ff;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+	</style>
+
+  </head>
+
+<a href="#openModal"  style="display:none;"> Приветствие! </a>
+
+<div id="openModal" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2 align="center">Добро пожаловать!</h2>
+		<p>Обращаем ваше внимание на то, что для корректной работы приложения необходимо использовать
+		последнюю версию браузера Firefox с активированной поддержкой WebGL 2</p>
+		<p>Убедитесь, что ваш ПК поддерживает OpenGL не ниже 3.0</p>
+
+	</div>
+</div>
+
+<body>
+
+<label class="custom-file-upload">
+    <input type="file" onchange="LoadData()" id="loadData">
+    -Load-
+</label>
+
+<label onclick="SaveData()">
+    -Save-
+</label>
+
+ <div class="emscripten_border">
+   <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+ </div>
+
+<textarea id="output" rows="8" style="width:100%;"></textarea>
+
+<script type='text/javascript'>
+
+function SaveData() {
+	Module.ccall('SaveDataOnDisk', 'null', ['null']);
+}
+
+function LoadData() {
+	var filePath = $('#loadData').val();
+	Module.ccall('LoadDataFromDisk', 'null', ['string'], [filePath]);
+}
+
+$(document).ready(function() {
+	$(this).css('background-color', '#FFFFFF');
+	$( "select" ).click();
+	$( "button" ).button();
+	$('table').addClass("ui-widget ui-widget-content ui-corner-all");
+	$( "#tabs" ).tabs();
+	$('modalDialog').addClass("ui-widget ui-widget-content ui-corner-all");
+	$('background').addClass("ui-widget ui-widget-content ui-corner-all");
+});
+
+function ResizeWindow(widthWnd, heightWnd) {
+   Module.ccall('SetResolution', 'null', ['number', 'number'], [widthWnd, heightWnd]);
+  }
+
+ 		$(window).resize(function() { ResizeWindow($(window).width(), $(window).height()) })
+
+ 		$(window).load(function() { ResizeWindow($(window).width(), $(window).height()) })
+
+      var Module = {
+
+      print: (function() {
+      var element = document.getElementById('output');
+      if (element) element.value = ''; // clear browser cache
+          return function(text) {
+            text = Array.prototype.slice.call(arguments).join(' ');
+            // These replacements are necessary if you render to raw HTML
+            //text = text.replace(/&/g, "&amp;");
+            //text = text.replace(/</g, "&lt;");
+            //text = text.replace(/>/g, "&gt;");
+            //text = text.replace('\n', '<br>', 'g');
+            console.log(text);
+
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+      })(),
+
+        canvas: (function() {return canvas;})()
+      };
+
+    </script>
+
+  </body>
+</html>

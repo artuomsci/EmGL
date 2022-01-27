@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<Configuration>
+	<Display>
+		<ResX val="1920"/>
+		<ResY val="1080"/>
+		<Antialiase val="0"/>
+		<AntialiseLevel val="0"/>
+		<Fullscreen val="0"/>
+		<BackColor R="0.0" G="0.0" B="0.0" A="1.0"/>
+	</Display>
+	<Camera>
+		<Type val="0"/>
+		<Fov val="90.0"/>
+		<NearPlane val="0.1"/>
+		<FarPlane val="10000.0"/>
+		<LeftBrd val="0"/>
+		<RightBrd val="0"/>
+		<BottomBrd val="0"/>
+		<TopBrd val="0"/>
+		<NearBrd val="0"/>
+		<FarBrd val="0"/>
+	</Camera>
+</Configuration>
